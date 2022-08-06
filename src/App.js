@@ -11,13 +11,6 @@ import NewTicket from './NewTicket.js';
 import SubmitState from "./SubmitState.js";
 import Home from "./Home.js";
 import './App.css';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 
 function App() {
 
@@ -33,8 +26,7 @@ function App() {
   const [lotteryBalance, setLotteryBalance] = useState(0);
   const [blockNumber, setBlockNumber] = useState(0);
 
-  const [open, setOpen] = useState(false);
-  const [dialog, setDialog] = useState(false);
+  const [open, setOpen] = useState(false);;
 
   useEffect(() => {
     async function loadLottery() {
@@ -160,32 +152,6 @@ function App() {
               </div>
             </div>
               <Button onClick={web3Handler} className="ConnectButton">Connect Wallet</Button>
-
-
-            {dialog ? (
-              <Dialog
-        open={open}
-       
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
-        </DialogActions>
-        </Dialog>
-
-            ) : (
-              <div></div>
-            )} 
             </header>
 
           )}
