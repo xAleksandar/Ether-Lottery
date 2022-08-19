@@ -10,6 +10,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [buyPeriod, setBuyPeriod] = useState(false);
+  const [winState, setWinState] = useState(4);
   const [loading, setLoading] = useState(true);
   const [numbersText, setNumbersText] = useState("");
 
@@ -47,12 +48,26 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     const latestBlockNumber = await provider.getBlockNumber();
     const latestBlock = await provider.getBlock(latestBlockNumber);
 
-
     // Check if lottery is currently in Buy or submit mode.
     if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 5)) {
      
       // BuyPeriod is false by default so we don't need to specify else statement.
       setBuyPeriod(true);
+    } else {
+
+      const blocktime = parseInt((await lotteryLogic.blocktime()).toString());
+      console.log("lbockkk", blocktime);
+      console.log('latest', latestBlock.timestamp)
+      if ((latestBlock.timestamp - blocktime) > 86400 * 4) {
+        setWinState(1);
+      }
+
+      else if ((latestBlock.timestamp - blocktime) > 120 && (latestBlock.timestamp - blocktime) < 86400 * 4) {
+        setWinState(3);
+      } else {
+        setWinState(2);
+      }
+
     }
 
 
@@ -169,6 +184,37 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     return time;
   }
   
+  const displayStep = (step) => {
+    switch (step) {
+      
+      case 1:
+        
+        return (
+          <button className="infoNumbersBtn" onClick={() => {lotteryLogic.requestNumbers()}} >Generate Numbers</button>
+        )
+
+      case 2:
+        
+        return (
+          <div className="asds">Generating Numbers, please come back latter</div>
+        )
+        
+      case 3:
+        
+        return (
+          <button className="infoNumbersBtn" onClick={() => {lotteryLogic.retrieveNewNumbers()}} >Reveal Numbers</button>
+       )
+
+      case 4:
+        return (
+          <div className="winningNumbers">
+            <h2>Winning Numbers:</h2>
+            <h2 className="mb-5"> {numbersText}</h2>
+          </div>
+        )
+    }
+  };
+
   return(
     <header className="App-header">
       <div className="LotteryLogo">
@@ -198,9 +244,8 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
           <Button onClick={() => navigate("/newTicket")} className="BuyTicketBtn">Buy new Ticket</Button>
         
         ) : (
-          <div className="winningNumbers">
-            <h2>Winning Numbers:</h2>
-            <h2 className="mb-5"> {numbersText}</h2>
+          <div className="info">
+            {displayStep(winState)}
           </div>
         )}
 

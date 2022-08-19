@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 import { MetroSpinner } from "react-spinners-kit";
 import { useEffect, useState } from 'react'
 import {Routes, Route, useNavigate} from 'react-router-dom';
+import Background from "./images/background.png";
 import { ethers } from 'ethers';
 import NewTicket from './NewTicket.js';
 import SubmitState from "./SubmitState.js";
@@ -69,23 +70,14 @@ function App() {
 
   /////////
 
-  /*const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<any, any>;
-    },
-    ref: React.Ref<unknown>,
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  }); */
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const web3Handler = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -118,9 +110,9 @@ function App() {
   if (account == null) {
 
     return (
-      <div className="App">
+      <div className="App" style={{background: `url(${Background})`}}>
           {loading ? (
-            <div className="App-header">
+            <div className="Container">
             <div className="LotteryLogo">
               <div className="LotteryLogo01">Ether</div>
               <div className="LotteryLogo02">Lottery</div>
@@ -132,16 +124,16 @@ function App() {
             </div>
             
           ) : (
-            <header className="App-header">
-            <div className="LotteryLogo">
-              <div className="LotteryLogo01">Ether</div>
-              <div className="LotteryLogo02">Lottery</div>
-            </div>
-            <div className="LotteryInfo">
-              <div className="LotteryInfoComponent">
-                <div>Round:</div>
-                <div>{lotteryRound}</div>
+            <div className="Container">
+              <div className="LotteryLogo">
+                <div className="LotteryLogo01">Ether</div>
+                <div className="LotteryLogo02">Lottery</div>
               </div>
+              <div className="LotteryInfo">
+                <div className="LotteryInfoComponent">
+                  <div>Round:</div>
+                  <div>{lotteryRound}</div>
+                </div>
               <div className="LotteryInfoComponent">
                 <div>Tickets:</div>
                 <div>{ticketsCount}</div>
@@ -152,7 +144,7 @@ function App() {
               </div>
             </div>
               <Button onClick={web3Handler} className="ConnectButton">Connect Wallet</Button>
-            </header>
+            </div>
 
           )}
       </div>

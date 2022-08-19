@@ -9,6 +9,11 @@
   pointer-events: none;
 }
 
+.loadingText {
+  padding: 40px 0px 0px 0px;
+  font-size: 50px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -19,13 +24,20 @@
   background-color: #282c34;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Container {
+  /*background-color: rgba(225, 217, 217, 0.6); */
+  background-color: rgba(176, 171, 171, 0.7); 
+  /*background-color: red; */
+  height: 80vh;
+  max-height: 80vh;
+  width: 150vh;
+  max-width: 150vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80px;
+  padding: 100px;
+  border: 5px solid rgb(113, 113, 113);
+  border-radius: 40px;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -35,6 +47,8 @@
 }
 
 .LotteryLogo {
+  height: 80px;
+  max-height: 80px;
   justify-content: center;
   font-size: calc(40px + 4vmin);
   display: flex;
@@ -42,13 +56,15 @@
 }
 
 .LotteryLogo01 {
+  font-size: 100px;
   color: rgb(187, 7, 187);
-  margin: 0px 10px;
+  margin: -40px 10px;
 }
 
 .LotteryLogo02 {
+  font-size: 100px;
   color: yellow;
-  margin: 0px 10px;
+  margin: -40px 10px;
 }
 
 .LotteryInfo {
@@ -113,6 +129,17 @@ td {
 .submitTicketBtn:hover {
   background-color: limegreen;
 
+}
+
+.infoNumbersBtn {
+  font-size: 40px;
+  padding: 5px 25px;
+  border-radius: 20px;
+  background-color:limegreen;
+}
+
+.infoNumbersBtn:hover {
+  transform: scale(1.03,1.05);
 }
 
 @keyframes App-logo-spin {
