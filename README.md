@@ -8,10 +8,10 @@ npm install ethers react-bootstrap react-spinners-kit react-router-dom react-che
 ```
 
 # Screenshots
-![Screenshot](screenshots/Screenshot001.png)
-![Screenshot](screenshots/Screenshot002.png)
-![Screenshot](screenshots/Screenshot003.png)
-![Screenshot](screenshots/Screenshot004.png)
+![Screenshot](screenshots/screenshot001.png)
+![Screenshot](screenshots/screenshot002.png)
+![Screenshot](screenshots/screenshot003.png)
+![Screenshot](screenshots/screenshot004.png)
 
 # Videos
 
