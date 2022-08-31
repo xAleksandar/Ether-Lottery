@@ -2,6 +2,10 @@
 
 An ethereum based lottery that uses Chainlink's VRF to prove the randomness of the game. Currently in construction.
 
+# Ether-Lottery.net Website
+
+The project is live at www.Ether-Lottery.net. Currently all the contracts are being deployed on the Rinkeby testnet. 
+
 # Setup
 ```bash
 npm install ethers react-bootstrap react-spinners-kit react-router-dom react-checkmark --legacy-peer-deps
