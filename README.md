@@ -8,15 +8,15 @@ npm install ethers react-bootstrap react-spinners-kit react-router-dom react-che
 ```
 
 # Screenshots
-![Screenshot](screenshots/screenshot001.png)
-![Screenshot](screenshots/screenshot002.png)
-![Screenshot](screenshots/screenshot003.png)
-![Screenshot](screenshots/screenshot004.png)
+![Screenshot](screenshots/Screenshot001.png)
+![Screenshot](screenshots/Screenshot002.png)
+![Screenshot](screenshots/Screenshot003.png)
+![Screenshot](screenshots/Screenshot004.png)
 
 # Videos
 
 1) Buying Tickets.
-https://youtu.be/SVaOjVFpilg
+https://youtu.be/-6Fdo3ItCxM
 
 2) Submitting Tickets.
-https://youtu.be/8FmOfF16Z0U
+https://youtu.be/1C6DG6JO5wQ

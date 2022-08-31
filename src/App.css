@@ -1,7 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
 
+.warning {
+  color: rgb(246, 28, 28);
+  font-size: 30px;
+}
+
 .App {
+  background-image: url("./images/background.png");
   text-align: center;
+  background-size: 100%;
+}
+
+.AppBuy {
+  background-image: url("./images/background.png");
+  background-size: 100%;
+  height: 1800px;
+  max-height: 1800px;
+  text-align: center;
+  padding: 100px 250px;
 }
 
 .App-logo {
@@ -21,15 +37,31 @@
 }
 
 .App {
-  background-color: #282c34;
+  /*background-color: #282c34; */
 }
 
 .Container {
   /*background-color: rgba(225, 217, 217, 0.6); */
-  background-color: rgba(176, 171, 171, 0.7); 
-  /*background-color: red; */
+  background-color: rgba(176, 171, 171, 0.7);
   height: 80vh;
   max-height: 80vh;
+  width: 150vh;
+  max-width: 150vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px;
+  border: 5px solid rgb(113, 113, 113);
+  border-radius: 40px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.ContainerBuy {
+  /*background-color: rgba(225, 217, 217, 0.6); */
+  background-color: rgba(176, 171, 171, 0.7);
+  height: 141vh;
+  max-height: 141vh;
   width: 150vh;
   max-width: 150vh;
   display: flex;
@@ -111,18 +143,38 @@ td {
 .submitTicketBtn {
   background-color: lime;
   color: white;
-  font-size: 40px;
+  font-size: 30px;
   font-family: "Neucha";
-  padding: 0px 40px;
+  padding: 0px 30px;
+  border-radius: 10px;
+}
+
+.submitedTicketBtn {
+  background-color: lightgreen;
+  color: white;
+  font-size: 30px;
+  font-family: "Neucha";
+  padding: 0px 20px;
   border-radius: 10px;
 }
 
 .notWinningStatus {
   background-color: rgb(194, 54, 54);
   color: white;
-  font-size: 40px;
+  font-size: 30px;
   font-family: "Neucha";
   padding: 0px 10px;
+  margin: 3px 0px;
+  border-radius: 10px;
+}
+
+.activeStatus {
+  background-color: lightgreen;
+  color: white;
+  font-size: 30px;
+  font-family: "Neucha";
+  padding: 0px 30px;
+  margin: 3px 5px;
   border-radius: 10px;
 }
 
@@ -140,6 +192,59 @@ td {
 
 .infoNumbersBtn:hover {
   transform: scale(1.03,1.05);
+}
+
+.GenerateNumbersText {
+  padding: 30px 0px 50px 0px;
+  font-size:50px;
+  font-family: "Neucha";
+}
+
+.TicketWindow {
+  display:flex;
+  flex-direction: column;
+  background-color: rgba(255,255,255,0.7);
+  border: 5px solid rgb(113, 113, 113);
+  border-radius: 25px;
+  color: black;
+  font-family: "Neucha";
+  width: 800px;
+  max-width: 800px;
+  height: 280px;
+  max-height: 280px;
+}
+
+.TicketBody {
+  display:flex;
+  flex-direction: grid;
+  justify-content: space-between;
+  font-size: 35px;
+}
+
+.Numbers_Date {
+  display: flex;
+  width: 620px;
+  max-width: 620px;
+  padding: 0px 10px;
+  justify-content: space-around;
+}
+
+.TicketNumbers{
+
+}
+
+.TicketsTop {
+  border-bottom: 5px solid rgb(113, 113, 113);
+}
+
+.EmptySpace {
+  height: 20px;
+  max-height: 20px;
+}
+
+.ListRow {
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes App-logo-spin {

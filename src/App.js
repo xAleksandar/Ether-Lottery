@@ -2,16 +2,18 @@ import LotteryStorageAbi from  './contractsData/LotteryStorage.json'
 import LotteryStorageAddress from './contractsData/LotteryStorage-address.json'
 import LotteryLogicAbi from './contractsData/LotteryLogic.json'
 import LotteryLogicAddress from './contractsData/LotteryLogic-address.json'
+import { BrowserView, MobileView } from 'react-device-detect';
 import { Button } from 'react-bootstrap'
 import { MetroSpinner } from "react-spinners-kit";
 import { useEffect, useState } from 'react'
 import {Routes, Route, useNavigate} from 'react-router-dom';
-import Background from "./images/background.png";
 import { ethers } from 'ethers';
 import NewTicket from './NewTicket.js';
 import SubmitState from "./SubmitState.js";
 import Home from "./Home.js";
 import './App.css';
+
+import Navigation from './components/Navbar';
 
 function App() {
 
@@ -26,6 +28,7 @@ function App() {
   const [lotteryRound, setLotteryRound] = useState(0);
   const [lotteryBalance, setLotteryBalance] = useState(0);
   const [blockNumber, setBlockNumber] = useState(0);
+  const [containerStyle, setContainerStyle] = useState(0);
 
   const [open, setOpen] = useState(false);;
 
@@ -110,8 +113,10 @@ function App() {
   if (account == null) {
 
     return (
-      <div className="App" style={{background: `url(${Background})`}}>
-          {loading ? (
+      //<div className="App" style={{background: `url(${Background})`}}>
+      <div className="App">
+        <Navigation className="Navibar" web3Handler={web3Handler} account={account} />
+        {loading ? (
             <div className="Container">
             <div className="LotteryLogo">
               <div className="LotteryLogo01">Ether</div>
@@ -125,41 +130,76 @@ function App() {
             
           ) : (
             <div className="Container">
-              <div className="LotteryLogo">
-                <div className="LotteryLogo01">Ether</div>
-                <div className="LotteryLogo02">Lottery</div>
-              </div>
-              <div className="LotteryInfo">
-                <div className="LotteryInfoComponent">
-                  <div>Round:</div>
-                  <div>{lotteryRound}</div>
+            <BrowserView>
+              {/*<div className="Container">*/}
+                <div className="LotteryLogo">
+                  <div className="LotteryLogo01">Ether</div>
+                  <div className="LotteryLogo02">Lottery</div>
                 </div>
-              <div className="LotteryInfoComponent">
-                <div>Tickets:</div>
-                <div>{ticketsCount}</div>
+                <div className="warning"> WARNING! Lottery is still in development mode. All the contracts are minted on the Rinkeby ethereum testnet. </div>
+                
+                <div className="LotteryInfo">
+                  <div className="LotteryInfoComponent">
+                    <div>Round:</div>
+                    <div>{lotteryRound}</div>
+                  </div>
+                <div className="LotteryInfoComponent">
+                  <div>Tickets:</div>
+                  <div>{ticketsCount}</div>
+                </div>
+                <div className="LotteryInfoComponent">
+                  <div>Lottery Assets:</div>
+                  <div>{lotteryBalance} ETH</div>
+                </div>
               </div>
-              <div className="LotteryInfoComponent">
-                <div>Lottery Assets:</div>
-                <div>{lotteryBalance} ETH</div>
-              </div>
+                
+                <Button onClick={web3Handler} className="ConnectButton">Connect Wallet</Button>
+            
+            </BrowserView>
+            <MobileView>
+              <div className="adsda">Currently not available for mobile devices.</div>
+            </MobileView>
             </div>
-              <Button onClick={web3Handler} className="ConnectButton">Connect Wallet</Button>
-            </div>
-
           )}
       </div>
       );
-    } else {
+    } else if (window.location.pathname == '/newTicket') {
+      return(
+        <div className="AppBuy">
+          <div className="ContainerBuy">
+          
+            <div className="LotteryLogo">
+              <div className="LotteryLogo01">Ether</div>
+              <div className="LotteryLogo02">Lottery</div>
+            </div>
+            
+            <Routes>
+              <Route path="/NewTicket" element={<NewTicket lotteryLogic={logicLottery} />} />
+              <Route path="/hh" element={<SubmitState lotteryLogic={logicLottery} account={account} />} />
+              <Route path="/" element={<Home lotteryLogic={logicLottery} lotteryStorage={storageLottery} account={account} />} />
+            </Routes>
+          </div>
+      </div>
+      );
     
+    } else {
+
     return(
       
       <div className="App">
-        <Routes>
-          <Route path="/NewTicket" element={<NewTicket lotteryLogic={logicLottery} />} />
-          <Route path="/hh" element={<SubmitState lotteryLogic={logicLottery} account={account} />} />
-          <Route path="/" element={<Home lotteryLogic={logicLottery} lotteryStorage={storageLottery} account={account} />} />
-        </Routes>
+          <div className="Container">
+          
+            <div className="LotteryLogo">
+              <div className="LotteryLogo01">Ether</div>
+              <div className="LotteryLogo02">Lottery</div>
+            </div>
             
+            <Routes>
+              <Route path="/NewTicket" element={<NewTicket lotteryLogic={logicLottery} />} />
+              <Route path="/hh" element={<SubmitState lotteryLogic={logicLottery} account={account} />} />
+              <Route path="/" element={<Home lotteryLogic={logicLottery} lotteryStorage={storageLottery} account={account} />} />
+            </Routes>
+          </div>
       </div>
     );
   }}

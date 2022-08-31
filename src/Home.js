@@ -1,9 +1,9 @@
 import { Button } from 'react-bootstrap'
+import { FlatList } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { MetroSpinner } from "react-spinners-kit";
 import { ethers } from 'ethers';
-
 
 const Home = ({lotteryLogic, lotteryStorage, account}) => {
   
@@ -13,7 +13,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
   const [winState, setWinState] = useState(4);
   const [loading, setLoading] = useState(true);
   const [numbersText, setNumbersText] = useState("");
-
+  const [loadingMessage, setLoadingMessage] = useState("Loading App State...");
 
   useEffect(() => {
     function load() {
@@ -29,7 +29,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     // Get the winning numbers in an array of integers.
     let winningNumbers = await lotteryLogic.getWinningNumbers();
     winningNumbers = winningNumbers.map(x => parseInt(x.toString()));
-
+    
     // Creating a winning numbers text that will be displayed to our users when the lottery is in submit state.
     let winningNumbersText = "";
 
@@ -47,22 +47,24 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     // Getting latest blocknumber and timestamp from provider.
     const latestBlockNumber = await provider.getBlockNumber();
     const latestBlock = await provider.getBlock(latestBlockNumber);
-
+    
     // Check if lottery is currently in Buy or submit mode.
     if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 5)) {
-     
+      
       // BuyPeriod is false by default so we don't need to specify else statement.
       setBuyPeriod(true);
     } else {
-
       const blocktime = parseInt((await lotteryLogic.blocktime()).toString());
-      console.log("lbockkk", blocktime);
-      console.log('latest', latestBlock.timestamp)
-      if ((latestBlock.timestamp - blocktime) > 86400 * 4) {
+      
+      if ((latestBlock.timestamp - blocktime) > 86400) {
         setWinState(1);
       }
 
-      else if ((latestBlock.timestamp - blocktime) > 120 && (latestBlock.timestamp - blocktime) < 86400 * 4) {
+      else if (await lotteryLogic.allowTicketSubmitting() == true) {
+        setWinState(4);
+      }
+
+      else if ((latestBlock.timestamp - blocktime) > 120 && (latestBlock.timestamp - blocktime) < 86400) {
         setWinState(3);
       } else {
         setWinState(2);
@@ -103,7 +105,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
 
         // If the lottery is in buy mode, the status remains unchanged.
         if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 5)) {
-          status = 'Active'
+          status = <div className="activeStatus">Active</div>
           
         } else {
 
@@ -127,7 +129,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
             if (!isSubmitted) {
               status = <button className="submitTicketBtn" onClick={() => {submitWinningTicket(i)}}>Submit</button>
             } else {
-              status = <div className="submitTicketBtn">Submitted</div>
+              status = <div className="submitedTicketBtn">Submitted</div>
             }
           
           
@@ -165,7 +167,8 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     const submitTransaction = await lotteryLogic.submitWinningTicket(id);
     
     lotteryLogic.on("newWinner", async () => {
-      navigate("/");
+      window.location.reload(true);
+      //navigate("/");
     })
 
   }
@@ -190,99 +193,129 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
       case 1:
         
         return (
-          <button className="infoNumbersBtn" onClick={() => {lotteryLogic.requestNumbers()}} >Generate Numbers</button>
+          <div className="NumbersBody">
+            <div className="GenerateNumbersText">Ticket purchase period has ended. Please Generate new winning numbers to check your tickets.</div>
+            <button className="infoNumbersBtn" onClick={
+              async () => {
+                await lotteryLogic.requestNumbers();
+                setLoadingMessage("Loading, please wait..");
+                setLoading(true);
+                lotteryLogic.on("generateNumbers", async () => {
+                  setWinState(2);
+                  setLoading(false);
+                })
+              }} >Generate Numbers</button>
+          </div>
         )
 
       case 2:
         
         return (
-          <div className="asds">Generating Numbers, please come back latter</div>
+          <div className="GenerateNumbersText" style={{padding: '60px 0px'}}>Generating Numbers, please come back in two minutes.</div>
         )
         
       case 3:
         
         return (
-          <button className="infoNumbersBtn" onClick={() => {lotteryLogic.retrieveNewNumbers()}} >Reveal Numbers</button>
-       )
+          <div className="NumbersBody">
+            <div className="GenerateNumbersText">New numbers have been generated. Click the button bellow to reveal them.</div>
+            <button className="infoNumbersBtn" onClick={
+              async () => {
+                await lotteryLogic.retrieveNewNumbers()
+                setLoadingMessage("Loading, please wait..");
+                setLoading(true);
+                lotteryLogic.on("generateNumbers", async () => {
+                  setWinState(4);
+                  setLoading(false);
+                })
+              }} >Reveal Numbers</button>
+          </div>  
+        )
 
       case 4:
         return (
-          <div className="winningNumbers">
-            <h2>Winning Numbers:</h2>
-            <h2 className="mb-5"> {numbersText}</h2>
+          <div className="GenerateNumbersText">
+            <h2>Lottery is in claim rewards state.</h2>
+            <h2 className="mb-5 text-green-300"> Winning Numbers: {numbersText}</h2>
+
+            {tickets.length >= 1 ? (
+              <div className="TicketWindow">
+                <div className="TicketsTop">Your Active Tickets</div>
+                <FlatList 
+                  data={tickets}
+                  renderItem={({ item }) => (
+                    <div className="TicketBody">
+                      <div className="Numbers_Date">
+                        <div className="TicketNumbers">{item.Numbers}</div>
+                        <div className="TicketDate">{item.Date}</div>
+                      </div>
+                      <div className="TicketStatus">{item.Status}</div>
+                    </div>
+                  )}  
+                />
+                <div className="EmptySpace"></div>
+              </div>
+            ) : (
+              <h2>you don't have any tickets.</h2>
+            )}
+
           </div>
         )
     }
   };
 
   return(
-    <header className="App-header">
-      <div className="LotteryLogo">
-        <div className="LotteryLogo01">Ether</div>
-        <div className="LotteryLogo02">Lottery</div>
-      </div>
-      <div className="LotteryInfo">
-
-
+    <header>
+      
       {loading ? (
-        
-        <div className="asd">  
+        <div className="LoadingContainer">
           <div className="loadingText">
-            Loading App State...
+             {loadingMessage}
           </div>
           <div className="spinner">
             <MetroSpinner size={80} color="white" />
           </div>
         </div>
+      
+      ):(
 
-      ) : (
-
-        <div className="asd">
-        
+        <div className="Body" style={{ padding: 30}}>
         {buyPeriod ? (
+          <div className="info">
+          {tickets.length >= 1 ? (
+            
+            <div className="TicketWindow"> 
+                <div className="TicketsTop">Your Active Tickets</div>
+                <FlatList 
+                  data={tickets}
+                  renderItem={({ item }) => (
+                    <div className="TicketBody">
+                      <div className="Numbers_Date">
+                        <div className="TicketNumbers">{item.Numbers}</div>
+                        <div className="TicketDate">{item.Date}</div>
+                      </div>
+                      <div className="TicketStatus">{item.Status}</div>
+                    </div>
+                  )}  
+                />
+                <div className="EmptySpace"></div>
+              </div>
+            ) : (
+            <div className="loadingText">you don't have any tickets.</div>
+          )}
           
           <Button onClick={() => navigate("/newTicket")} className="BuyTicketBtn">Buy new Ticket</Button>
-        
+          </div>
         ) : (
           <div className="info">
             {displayStep(winState)}
           </div>
         )}
-
-        {tickets.length >= 1 ? (
-
-          <table>
-          <thead>
-            <tr>
-              <th>Numbers</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-          {tickets.map((ticket) => (
-              <tr key={ticket.id}>
-                <td>{ticket.Numbers}</td>
-                <td>{ticket.Date}</td>
-                <td>{ticket.Status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        ) : (
-        
-          <h2>You do not have any active tickets.</h2>
-      
-        )}
-        
-        </div>        
-
+        </div>
       )}
-
-      </div>
-      </header>
+    </header>
   )
+
 }
 
 export default Home;
