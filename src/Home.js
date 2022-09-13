@@ -48,8 +48,9 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     const latestBlockNumber = await provider.getBlockNumber();
     const latestBlock = await provider.getBlock(latestBlockNumber);
     
+    console.log("DAY ", Math.floor(latestBlock.timestamp/86400) % 7)
     // Check if lottery is currently in Buy or submit mode.
-    if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 5)) {
+    if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3)) {
       
       // BuyPeriod is false by default so we don't need to specify else statement.
       setBuyPeriod(true);
@@ -104,7 +105,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
         let status = "Active";
 
         // If the lottery is in buy mode, the status remains unchanged.
-        if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 5)) {
+        if (!(Math.floor(latestBlock.timestamp/86400) % 7 === 2) && !(Math.floor(latestBlock.timestamp/86400) % 7 === 3)) {
           status = <div className="activeStatus">Active</div>
           
         } else {
