@@ -13,8 +13,6 @@ import SubmitState from "./SubmitState.js";
 import Home from "./Home.js";
 import './App.css';
 
-import Navigation from './components/Navbar';
-
 function App() {
 
   const navigate = useNavigate();
@@ -35,7 +33,8 @@ function App() {
   useEffect(() => {
     async function loadLottery() {
 
-      const RPC = "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161";
+      //const RPC = "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161";
+      const RPC = "https://eth-goerli.g.alchemy.com/v2/udeXBeBE8aVQnb7oj2zvSOlJRUhgca5g";
       const provider = new ethers.providers.JsonRpcProvider(RPC);
       
       const systemLotteryLogic = new ethers.Contract(LotteryLogicAddress.address, LotteryLogicAbi.abi, provider);
@@ -115,7 +114,6 @@ function App() {
     return (
       //<div className="App" style={{background: `url(${Background})`}}>
       <div className="App">
-        <Navigation className="Navibar" web3Handler={web3Handler} account={account} />
         {loading ? (
             <div className="Container">
             <div className="LotteryLogo">

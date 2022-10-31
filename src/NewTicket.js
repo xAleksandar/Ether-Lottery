@@ -93,7 +93,7 @@ const NewTicket = ({lotteryLogic}) => {
     window.scrollTo(0, 0);
     
     // Calculate the msg.value (ticket price) in wei.
-    const weiPrice = ((numbers.length - 4)**2)*20000000000000000;
+    const weiPrice = ((numbers.length - 4)**2)*2000000000000000;
     
     // Declare transaction.
     // let transaction;
@@ -109,6 +109,7 @@ const NewTicket = ({lotteryLogic}) => {
     try {
       //console.log("test 111")
       // Send the transaction.
+      console.log("Price ", weiPrice.toString())
       const transaction = await lotteryLogic.buyTicket(numbers, { value: weiPrice.toString()});
       //console.log("test 222")
       setTransactionHash(transaction.hash)

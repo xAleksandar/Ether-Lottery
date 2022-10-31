@@ -41,7 +41,7 @@ const Home = ({lotteryLogic, lotteryStorage, account}) => {
     setNumbersText(winningNumbersText);
 
     // Connecting to provider to read information before a metamask wallet is connected.
-    const RPC = "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161";
+    const RPC = "https://eth-goerli.g.alchemy.com/v2/udeXBeBE8aVQnb7oj2zvSOlJRUhgca5g";
     const provider = new ethers.providers.JsonRpcProvider(RPC);
 
     // Getting latest blocknumber and timestamp from provider.
