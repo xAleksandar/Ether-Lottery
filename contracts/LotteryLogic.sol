@@ -18,7 +18,7 @@ contract LotteryLogic {
 
     constructor (address _lotteryStorageAddress) {
         
-        VRFv2ConsumerAddress = address(new VRFv2Consumer(4513));
+        VRFv2ConsumerAddress = address(new VRFv2Consumer(5903));
         ChainlinkVRF = VRFv2Consumer(VRFv2ConsumerAddress);
         Storage = LotteryStorage(_lotteryStorageAddress);
         owner = msg.sender;
